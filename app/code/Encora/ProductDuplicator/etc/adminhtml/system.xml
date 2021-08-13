@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Encora_ProductDuplicator
+ *
+ * PHP version 7.x
+ *
+ * @category  PHP
+ * @package   Encora\ProductDuplicator
+ * @author    Narendra Kamadi <narendrakamadi@gmail.com>
+ * @copyright 2021 Copyright (c) Encora
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="encora" translate="label" sortOrder="10">
+            <label>Encora Extensions</label>
+        </tab>
+        <section id="productduplicator" translate="label" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label><![CDATA[Product Duplicator Management]]></label>
+            <tab>encora</tab>
+            <resource>Encora_ProductDuplicator::productduplicator</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>General Configuration</label>
+                <field id="product_limit" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Product Limit to Copy</label>
+                </field>
+                <field id="schedule" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Schedule</label>
+                    <comment>
+                        <![CDATA[
+<pre>
+    * * * * *
+    | | | | |
+    | | | | +---- Day of the Week   (range: 1-7, 1 standing for Monday)
+    | | | +------ Month of the Year (range: 1-12)
+    | | +-------- Day of the Month  (range: 1-31)
+    | +---------- Hour              (range: 0-23)
+    +------------ Minute            (range: 0-59)
+    Example: 0 0 * * * Daily at midnight
+</pre>
+                        ]]>
+                    </comment>
+                </field>
+                <field id="debug" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Debug</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

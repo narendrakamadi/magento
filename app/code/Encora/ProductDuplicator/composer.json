@@ -1,0 +1,22 @@
+{
+    "name": "encora/module-productduplicator",
+    "description": "Module for duplicating existing simple product which has encora type value new",
+    "type": "magento2-module",
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Encora",
+            "email": "narendrakamadi@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Encora\\ProductDuplicator\\": ""
+        }
+    }
+}

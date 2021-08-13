@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Encora_ProductDuplicator
+ *
+ * PHP version 7.x
+ *
+ * @category  PHP
+ * @package   Encora\ProductDuplicator
+ * @author    Narendra Kamadi <narendrakamadi@gmail.com>
+ * @copyright 2021 Copyright (c) Encora
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="encora_productduplicator_tmp" resource="default" engine="innodb" comment="Encora ProductDuplicator Tmp Table">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="int" name="product_id" nullable="false" comment="Product Id"/>
+        <column xsi:type="varchar" name="product_name" nullable="false" length="255" comment="Product Name"/>
+        <column xsi:type="varchar" name="product_sku" nullable="false" length="255" comment="Product Sku"/>
+        <column xsi:type="smallint" name="status" default="0" comment="Share Coupon Status"/>
+        <column xsi:type="timestamp" name="created_at" default="CURRENT_TIMESTAMP" comment="Created At"/>
+        <column xsi:type="timestamp" name="updated_at" default="CURRENT_TIMESTAMP" comment="Updated At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+    </table>
+</schema>

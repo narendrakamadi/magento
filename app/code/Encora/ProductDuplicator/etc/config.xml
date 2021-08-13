@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Encora_ProductDuplicator
+ *
+ * PHP version 7.x
+ *
+ * @category  PHP
+ * @package   Encora\ProductDuplicator
+ * @author    Narendra Kamadi <narendrakamadi@gmail.com>
+ * @copyright 2021 Copyright (c) Encora
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <productduplicator>
+            <general>
+                <product_limit>100</product_limit>
+                <schedule>*/30 * * * *</schedule>
+            </general>
+        </productduplicator>
+    </default>
+</config>

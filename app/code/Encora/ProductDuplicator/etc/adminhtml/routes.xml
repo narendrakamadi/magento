@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Encora_ProductDuplicator
+ *
+ * PHP version 7.x
+ *
+ * @category  PHP
+ * @package   Encora\ProductDuplicator
+ * @author    Narendra Kamadi <narendrakamadi@gmail.com>
+ * @copyright 2021 Copyright (c) Encora
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+    <router id="admin">
+        <route id="productduplicator" frontName="productduplicator">
+            <module name="Encora_ProductDuplicator" before="Magento_Backend"/>
+        </route>
+    </router>
+</config>

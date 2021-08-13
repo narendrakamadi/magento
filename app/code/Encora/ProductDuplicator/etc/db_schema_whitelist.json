@@ -1,0 +1,16 @@
+{
+  "encora_productduplicator_tmp": {
+    "column": {
+      "id": true,
+      "product_id": true,
+      "product_name": true,
+      "product_sku": true,
+      "status": true,
+      "created_at": true,
+      "updated_at": true
+    },
+    "constraint": {
+      "PRIMARY": true
+    }
+  }
+}
