@@ -22,7 +22,7 @@ use Magento\Framework\View\Result\PageFactory;
  */
 class Index extends Action
 {
-	public function __construct(
+    public function __construct(
         Context $context,
         PageFactory $resultPageFactory
     ) {

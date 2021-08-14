@@ -51,8 +51,7 @@ class MassDelete extends Action
         CollectionFactory $collectionFactory,
         RedirectFactory   $redirectFactory,
         Action\Context    $context
-    )
-    {
+    ) {
         $this->filter = $filter;
         $this->redirectFactory = $redirectFactory;
         $this->collectionFactory = $collectionFactory;

@@ -18,7 +18,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Encora\ProductDuplicator\Model\ResourceModel\DuplicatorResource;
 use Magento\Catalog\Model\ProductRepository;
-use Magento\Catalog\Model\Product\Copier;
+use Magento\Catalog\Model\ProductFactory;
 
 /**
  * Class ProductManagement of ProductDuplicator
@@ -51,11 +51,13 @@ class ProductManagement
     private $productRepository;
 
     /**
-     * @var Copier
+     * @var ProductFactory
      */
-    private $copier;
+    protected $productFactory;
 
     const ENCORA_PRODUCT_TYPE_NEW = 'new';
+    const ENCORA_PRODUCT_TYPE_USED = 'used';
+    const ENCORA_PRODUCT_TYPE_REFURBISHED = 'refurbished';
     const PRODUCT_TYPE_ID = 'simple';
     const XML_PATH_DUPLICATE_PRODUCT_LOGGER_ENABLE = 'productduplicator/general/debug';
     const XML_PATH_PRODUCT_BATCH_LIMIT = 'productduplicator/general/product_limit';
@@ -66,7 +68,7 @@ class ProductManagement
      * @param ScopeConfigInterface $scopeConfig
      * @param DuplicatorResource $productDuplicator
      * @param ProductRepository $productRepository
-     * @param Copier $copier
+     * @param ProductFactory $productFactory
      */
     public function __construct(
         Logger $logger,
@@ -74,14 +76,14 @@ class ProductManagement
         ScopeConfigInterface $scopeConfig,
         DuplicatorResource $productDuplicator,
         ProductRepository $productRepository,
-        Copier $copier
+        ProductFactory $productFactory
     ) {
         $this->logger = $logger;
         $this->productCollection = $productCollection;
         $this->scopeConfig = $scopeConfig;
         $this->productDuplicator = $productDuplicator;
         $this->productRepository = $productRepository;
-        $this->copier = $copier;
+        $this->productFactory = $productFactory;
     }
 
     /**
@@ -150,10 +152,100 @@ class ProductManagement
         }
     }
 
+    /**
+     * @param $newProductInstance
+     */
     private function duplicateProduct($newProductInstance)
     {
-        $this->copier->copy($newProductInstance);
-        $this->logger->info("Product with SKU $newProductInstance->getSku() copied successfully.");
+        try {
+            $this->duplicateUsedProduct($newProductInstance);
+            $this->duplicateRefurbishedProduct($newProductInstance);
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
+        }
+    }
+
+    /**
+     * @param $newProduct
+     */
+    protected function duplicateUsedProduct($newProduct)
+    {
+        try {
+            $usedProductInstance = $this->productFactory->create();
+            $usedProductInstance->setSku($newProduct->getSku() . '_' . self::ENCORA_PRODUCT_TYPE_USED);
+            $usedProductInstance->setName($newProduct->getName() . ' ' . ucfirst(self::ENCORA_PRODUCT_TYPE_USED));
+            $usedProductInstance->setUrlKey($newProduct->getUrlKey() . '_' . self::ENCORA_PRODUCT_TYPE_USED);
+            $usedProductInstance->setAttributeSetId($newProduct->getDefaultAttributeSetId());
+            $usedProductInstance->setStatus($newProduct->getStatus());
+            $usedProductInstance->setVisibility($newProduct->getVisibility());
+            $usedProductInstance->setTaxClassId($newProduct->getTaxClassId());
+            $usedProductInstance->setTypeId($newProduct->getTypeId());
+            $usedProductInstance->setProductHasWeight($newProduct->getProductHasWeight());
+            $usedProductInstance->setWeight($newProduct->getWeight());
+            $usedProductInstance->setEncoraProductType(self::ENCORA_PRODUCT_TYPE_USED);
+            $usedProductInstance->setPrice($newProduct->getPrice());
+            $usedProductInstance->setWebsiteIds($newProduct->getWebsiteIds());
+            $usedProductInstance->setCategoryIds($newProduct->getCategoryIds());
+            $usedProductInstance->setStockData(
+                [
+                    'use_config_manage_stock' => 0,
+                    'manage_stock' => 1,
+                    'is_in_stock' => 1,
+                    'qty' => $newProduct->getDefaultAttributeSetId()
+                ]
+            );
+            $usedProductInstance->save();
+            $this->logger->info("Product with a SKU " . $newProduct->getSku() . " copied for used type successfully.");
+            $this->updateQueueProduct($newProduct->getId());
+        } catch (\Exception $e) {
+            $this->logger->info("Product with a SKU " . $newProduct->getSku() . " was not copied for used type. Error : " . $e->getMessage());
+        }
+    }
+
+    protected function duplicateRefurbishedProduct($newProduct)
+    {
+        try {
+            $refurbishedProductInstance = $this->productFactory->create();
+            $refurbishedProductInstance->setSku($newProduct->getSku() . '_' . self::ENCORA_PRODUCT_TYPE_REFURBISHED);
+            $refurbishedProductInstance->setName($newProduct->getName() . ' ' . ucfirst(self::ENCORA_PRODUCT_TYPE_REFURBISHED));
+            $refurbishedProductInstance->setUrlKey($newProduct->getUrlKey() . '_' . self::ENCORA_PRODUCT_TYPE_REFURBISHED);
+            $refurbishedProductInstance->setAttributeSetId($newProduct->getDefaultAttributeSetId());
+            $refurbishedProductInstance->setStatus($newProduct->getStatus());
+            $refurbishedProductInstance->setVisibility($newProduct->getVisibility());
+            $refurbishedProductInstance->setTaxClassId($newProduct->getTaxClassId());
+            $refurbishedProductInstance->setTypeId($newProduct->getTypeId());
+            $refurbishedProductInstance->setProductHasWeight($newProduct->getProductHasWeight());
+            $refurbishedProductInstance->setWeight($newProduct->getWeight());
+            $refurbishedProductInstance->setEncoraProductType(self::ENCORA_PRODUCT_TYPE_REFURBISHED);
+            $refurbishedProductInstance->setPrice($newProduct->getPrice());
+            $refurbishedProductInstance->setWebsiteIds($newProduct->getWebsiteIds());
+            $refurbishedProductInstance->setCategoryIds($newProduct->getCategoryIds());
+            $refurbishedProductInstance->setStockData(
+                [
+                    'use_config_manage_stock' => 0,
+                    'manage_stock' => 1,
+                    'is_in_stock' => 1,
+                    'qty' => $newProduct->getDefaultAttributeSetId()
+                ]
+            );
+            $refurbishedProductInstance->save();
+            $this->logger->info("Product with a SKU " . $newProduct->getSku() . " copied for refurbished type successfully.");
+            $this->updateQueueProduct($newProduct->getId());
+        } catch (\Exception $e) {
+            $this->logger->info("Product with an SKU " . $newProduct->getSku() . " was not copied for refurbished type. Error : " . $e->getMessage());
+        }
+    }
+
+    /**
+     * @param $productId
+     */
+    public function updateQueueProduct($productId)
+    {
+        $connection  = $this->productDuplicator->getConnection();
+        $insertData = ['status' => 1];
+        $where = ['product_sku = ?' => $productId];
+        $tableName = $connection->getTableName("encora_productduplicator_tmp");
+        $connection->update($tableName, $insertData, $where);
     }
 
     /**
