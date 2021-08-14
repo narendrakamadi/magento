@@ -134,7 +134,8 @@ class ProductManagement
         $select = $connection
             ->select()
             ->from($this->productDuplicator->getTable('encora_productduplicator_tmp'))
-            ->where('status = 0');
+            ->where('status = 0')
+            ->limit($this->getProductBatchProcessLimit());
 
         return $connection->fetchAll($select);
     }
@@ -196,7 +197,7 @@ class ProductManagement
             );
             $usedProductInstance->save();
             $this->logger->info("Product with a SKU " . $newProduct->getSku() . " copied for used type successfully.");
-            $this->updateQueueProduct($newProduct->getId());
+            $this->updateQueueProduct($newProduct->getSku());
         } catch (\Exception $e) {
             $this->logger->info("Product with a SKU " . $newProduct->getSku() . " was not copied for used type. Error : " . $e->getMessage());
         }
@@ -230,22 +231,20 @@ class ProductManagement
             );
             $refurbishedProductInstance->save();
             $this->logger->info("Product with a SKU " . $newProduct->getSku() . " copied for refurbished type successfully.");
-            $this->updateQueueProduct($newProduct->getId());
+            $this->updateQueueProduct($newProduct->getSku());
         } catch (\Exception $e) {
             $this->logger->info("Product with an SKU " . $newProduct->getSku() . " was not copied for refurbished type. Error : " . $e->getMessage());
         }
     }
 
     /**
-     * @param $productId
+     * Update product status
+     * @param $productSku
      */
-    public function updateQueueProduct($productId)
+    public function updateQueueProduct($productSku)
     {
-        $connection  = $this->productDuplicator->getConnection();
-        $insertData = ['status' => 1];
-        $where = ['product_sku = ?' => $productId];
-        $tableName = $connection->getTableName("encora_productduplicator_tmp");
-        $connection->update($tableName, $insertData, $where);
+        $updateQuery = "UPDATE `encora_productduplicator_tmp` SET `status` = 1 WHERE `product_sku` = '" . $productSku . "'";
+        $this->productDuplicator->getConnection()->query($updateQuery);
     }
 
     /**
