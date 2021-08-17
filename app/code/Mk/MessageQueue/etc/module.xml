@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mk_MessageQueue
+ *
+ * @category  Xml
+ * @package   Mk\MessageQueue
+ * @author    Mk Team <mk.support@gmail.com>
+ * @copyright 2020 Copyright (c) TechnoLab
+ * @link      https://www.mktechnolab.com/
+ **/
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+    <module name="Mk_MessageQueue" setup_version="1.0.0">
+        <sequence>
+            <module name="Magento_Backend"/>
+        </sequence>
+    </module>
+</config>

@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Mk_MessageQueue
+ *
+ * @category  Xml
+ * @package   Mk\MessageQueue
+ * @author    Mk Team <mk.support@gmail.com>
+ * @copyright 2020 Copyright (c) TechnoLab
+ * @link      https://www.mktechnolab.com/
+ **/
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Mk\MessageQueue\Api\ProductImportInterface" type="Mk\MessageQueue\Model\ProductImport"/>
+    <preference for="Mk\MessageQueue\Api\ProductInterface" type="Mk\MessageQueue\Model\Product"/>
+</config>
