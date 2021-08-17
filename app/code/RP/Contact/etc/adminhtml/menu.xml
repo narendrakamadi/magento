@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * RP_Contact
+ *
+ * PHP version 7.x
+ *
+ * @category  PHP
+ * @package   RP\Contact
+ * @author    Narendra Kamadi <narendrakamadi@gmail.com>
+ * @copyright 2021 Copyright (c) Right Point
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="RP_Contact::rp" title="Right Point" module="RP_Contact" sortOrder="100" resource="RP_Contact::rp"/>
+        <add id="RP_Contact::manage" title="Contact Us" module="RP_Contact" resource="RP_Contact::manage" parent="RP_Contact::rp" translate="true"/>
+        <add id="RP_Contact::contact" title="Contact" module="RP_Contact" parent="RP_Contact::manage" resource="RP_Contact::contact" action="rpcontact/index/index" translate="true"/>
+    </menu>
+</config>

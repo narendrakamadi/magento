@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * RP_Contact
+ *
+ * PHP version 7.x
+ *
+ * @category  PHP
+ * @package   RP\Contact
+ * @author    Narendra Kamadi <narendrakamadi@gmail.com>
+ * @copyright 2021 Copyright (c) Right Point
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+    <router id="admin">
+        <route id="rpcontact" frontName="rpcontact">
+            <module name="RP_Contact" before="Magento_Backend" />
+        </route>
+    </router>
+</config>
